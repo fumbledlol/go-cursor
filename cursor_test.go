@@ -29,9 +29,9 @@ func buildTestCUR(w, h, hotX, hotY int, payload []byte) []byte {
 	var buf bytes.Buffer
 
 	// ICONDIR
-	binary.Write(&buf, binary.LittleEndian, uint16(0)) // idReserved
-	binary.Write(&buf, binary.LittleEndian, uint16(2)) // idType (2 = cursor)
-	binary.Write(&buf, binary.LittleEndian, uint16(1)) // idCount (1 image)
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(0)) // idReserved
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(2)) // idType (2 = cursor)
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(1)) // idCount (1 image)
 
 	// ICONDIRENTRY
 	bW := byte(w)
@@ -46,10 +46,10 @@ func buildTestCUR(w, h, hotX, hotY int, payload []byte) []byte {
 	buf.WriteByte(bH)
 	buf.WriteByte(0) // bColorCount
 	buf.WriteByte(0) // bReserved
-	binary.Write(&buf, binary.LittleEndian, uint16(hotX))
-	binary.Write(&buf, binary.LittleEndian, uint16(hotY))
-	binary.Write(&buf, binary.LittleEndian, uint32(len(payload)))
-	binary.Write(&buf, binary.LittleEndian, uint32(6+16)) // offset to image data
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(hotX))
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(hotY))
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(len(payload)))
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(6+16)) // offset to image data
 
 	buf.Write(payload)
 	return buf.Bytes()
@@ -59,17 +59,17 @@ func buildTestCUR(w, h, hotX, hotY int, payload []byte) []byte {
 func buildTestDIB32(w, h int) []byte {
 	var buf bytes.Buffer
 	// BITMAPINFOHEADER (40 bytes)
-	binary.Write(&buf, binary.LittleEndian, uint32(40))    // biSize
-	binary.Write(&buf, binary.LittleEndian, int32(w))      // biWidth
-	binary.Write(&buf, binary.LittleEndian, int32(h*2))    // biHeight (x2 for DIB with mask)
-	binary.Write(&buf, binary.LittleEndian, uint16(1))     // biPlanes
-	binary.Write(&buf, binary.LittleEndian, uint16(32))    // biBitCount
-	binary.Write(&buf, binary.LittleEndian, uint32(0))     // biCompression
-	binary.Write(&buf, binary.LittleEndian, uint32(w*h*4)) // biSizeImage
-	binary.Write(&buf, binary.LittleEndian, int32(0))      // biXPelsPerMeter
-	binary.Write(&buf, binary.LittleEndian, int32(0))      // biYPelsPerMeter
-	binary.Write(&buf, binary.LittleEndian, uint32(0))     // biClrUsed
-	binary.Write(&buf, binary.LittleEndian, uint32(0))     // biClrImportant
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(40))    // biSize
+	_ = binary.Write(&buf, binary.LittleEndian, int32(w))      // biWidth
+	_ = binary.Write(&buf, binary.LittleEndian, int32(h*2))    // biHeight (x2 for DIB with mask)
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(1))     // biPlanes
+	_ = binary.Write(&buf, binary.LittleEndian, uint16(32))    // biBitCount
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(0))     // biCompression
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(w*h*4)) // biSizeImage
+	_ = binary.Write(&buf, binary.LittleEndian, int32(0))      // biXPelsPerMeter
+	_ = binary.Write(&buf, binary.LittleEndian, int32(0))      // biYPelsPerMeter
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(0))     // biClrUsed
+	_ = binary.Write(&buf, binary.LittleEndian, uint32(0))     // biClrImportant
 
 	// Pixel data: BGRA
 	for range h {
@@ -90,7 +90,7 @@ func buildTestANI(frames [][]byte, rates []uint32, seq []uint32, w, h int) []byt
 	listFram.WriteString("fram")
 	for _, f := range frames {
 		listFram.WriteString("icon")
-		binary.Write(&listFram, binary.LittleEndian, uint32(len(f)))
+		_ = binary.Write(&listFram, binary.LittleEndian, uint32(len(f)))
 		listFram.Write(f)
 		if len(f)&1 != 0 {
 			listFram.WriteByte(0)
@@ -102,38 +102,38 @@ func buildTestANI(frames [][]byte, rates []uint32, seq []uint32, w, h int) []byt
 
 	// anih chunk
 	riffBody.WriteString("anih")
-	binary.Write(&riffBody, binary.LittleEndian, uint32(36))
-	binary.Write(&riffBody, binary.LittleEndian, uint32(36))          // cbSize
-	binary.Write(&riffBody, binary.LittleEndian, uint32(len(frames))) // nFrames
-	binary.Write(&riffBody, binary.LittleEndian, uint32(len(frames))) // nSteps
-	binary.Write(&riffBody, binary.LittleEndian, uint32(w))           // iWidth
-	binary.Write(&riffBody, binary.LittleEndian, uint32(h))           // iHeight
-	binary.Write(&riffBody, binary.LittleEndian, uint32(32))          // nBitsPixel
-	binary.Write(&riffBody, binary.LittleEndian, uint32(1))           // nPlanes
-	binary.Write(&riffBody, binary.LittleEndian, uint32(6))           // iDispRate (6 jiffies = 100ms)
-	binary.Write(&riffBody, binary.LittleEndian, uint32(1))           // bfAttributes
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(36))
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(36))          // cbSize
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(len(frames))) // nFrames
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(len(frames))) // nSteps
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(w))           // iWidth
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(h))           // iHeight
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(32))          // nBitsPixel
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(1))           // nPlanes
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(6))           // iDispRate (6 jiffies = 100ms)
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(1))           // bfAttributes
 
 	// rate chunk
 	if len(rates) > 0 {
 		riffBody.WriteString("rate")
-		binary.Write(&riffBody, binary.LittleEndian, uint32(len(rates)*4))
+		_ = binary.Write(&riffBody, binary.LittleEndian, uint32(len(rates)*4))
 		for _, r := range rates {
-			binary.Write(&riffBody, binary.LittleEndian, r)
+			_ = binary.Write(&riffBody, binary.LittleEndian, r)
 		}
 	}
 
 	// seq chunk
 	if len(seq) > 0 {
 		riffBody.WriteString("seq ")
-		binary.Write(&riffBody, binary.LittleEndian, uint32(len(seq)*4))
+		_ = binary.Write(&riffBody, binary.LittleEndian, uint32(len(seq)*4))
 		for _, s := range seq {
-			binary.Write(&riffBody, binary.LittleEndian, s)
+			_ = binary.Write(&riffBody, binary.LittleEndian, s)
 		}
 	}
 
 	// LIST fram chunk
 	riffBody.WriteString("LIST")
-	binary.Write(&riffBody, binary.LittleEndian, uint32(listFram.Len()))
+	_ = binary.Write(&riffBody, binary.LittleEndian, uint32(listFram.Len()))
 	riffBody.Write(listFram.Bytes())
 	if listFram.Len()&1 != 0 {
 		riffBody.WriteByte(0)
@@ -141,7 +141,7 @@ func buildTestANI(frames [][]byte, rates []uint32, seq []uint32, w, h int) []byt
 
 	var result bytes.Buffer
 	result.WriteString("RIFF")
-	binary.Write(&result, binary.LittleEndian, uint32(riffBody.Len()))
+	_ = binary.Write(&result, binary.LittleEndian, uint32(riffBody.Len()))
 	result.Write(riffBody.Bytes())
 
 	return result.Bytes()
